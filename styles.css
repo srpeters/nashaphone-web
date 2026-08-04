@@ -213,6 +213,23 @@ img, svg { display: block; }
   box-shadow: var(--shadow-md); white-space: nowrap;
 }
 
+/* Below 600px the absolute overlap starts hiding the card labels and the
+   brand logos, so the composition becomes a 2x2 grid: three cards plus the
+   badge. Depth still comes from the shadows, rotation and float. */
+@media (max-width: 599px) {
+  .hero__visual {
+    position: static; aspect-ratio: auto; max-width: 460px;
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px;
+  }
+  .hero__visual::before { display: none; }
+  .pcard { position: static; width: auto; inset: auto; min-width: 0; }
+  .pcard__art svg { max-height: 76px; }
+  .hero__badge {
+    position: static; align-self: center; justify-self: center;
+    text-align: center; white-space: normal;   /* nowrap would widen the track */
+  }
+}
+
 /* ---------- stats ---------- */
 
 .stats { border-block: 1px solid var(--hairline); background: var(--white); }
