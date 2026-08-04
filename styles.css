@@ -189,11 +189,16 @@ img, svg { display: block; }
   border-radius: var(--radius); box-shadow: var(--shadow-lg);
   padding: 14px; display: flex; flex-direction: column; gap: 10px;
 }
+/* The three hero photographs have different native ratios (16:9, 1:1 and
+   4:3), so `cover` was throwing away a quarter of two of them. `contain`
+   shows the whole product, and the art field is set to #FEFEFE — sampled
+   from the photographs' own background — so the letterboxing is invisible
+   and the product reads as floating on the card. */
 .pcard__art {
-  background: var(--surface); border-radius: var(--radius-sm);
+  background: #FEFEFE; border-radius: var(--radius-sm);
   overflow: hidden; aspect-ratio: 4 / 3;
 }
-.pcard__art img { width: 100%; height: 100%; object-fit: cover; }
+.pcard__art img { width: 100%; height: 100%; object-fit: contain; }
 .pcard__foot { display: flex; align-items: center; gap: 8px; }
 .pcard__label { font-size: .75rem; font-weight: 600; color: var(--muted); letter-spacing: .01em; }
 
