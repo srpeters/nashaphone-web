@@ -27,6 +27,39 @@ All four images are used under the **Pexels License**
 | 03 Televisores | `assets/img/televisores.*` | <https://www.pexels.com/photo/6316063/> | 6316063 |
 | 04 Electrónica de consumo | `assets/img/electronica.*` | <https://www.pexels.com/photo/3394650/> | 3394650 |
 
+## Featured offer band image
+
+| Where | File | Source |
+|---|---|---|
+| Oferta destacada band | `assets/img/samsung-s20.*` | **Supplied by the client** |
+
+This one is **not** from a stock library and carries **no licence I have
+verified**. It was supplied by Z, saved to his Downloads folder, and it
+is manufacturer product imagery of the Samsung Galaxy S20 — the product
+actually being offered in that band, not decoration or an endorsement
+claim.
+
+**Z is responsible for having the right to use it.** I make no claim
+about that right, because I cannot verify it. Manufacturer product
+imagery is commonly permitted for resellers advertising the genuine
+product, and is commonly restricted in other ways; if there is any doubt,
+the safe options are to photograph the actual stock or to ask the
+supplier for the press kit and its usage terms.
+
+The trademark notice under the brand wall, and the one on the Aviso legal
+page, already state that third-party marks belong to their owners and
+that their mention implies no affiliation.
+
+Processing: the supplied PNG was 1254x1254, RGB, with **no alpha channel**
+and an opaque near-white background, which would have rendered as a white
+slab on the near-black band. The background was removed with a
+connectivity-based flood fill from the borders (not a global threshold,
+which would have punched holes in the light-blue handset and the white
+"SAMSUNG" and "S20" lettering), the subject eroded by 1px to drop the
+blended boundary pixels, then premultiplied, resized and unpremultiplied
+so no white bled into the edges. Delivered at 725x850 as WebP (86 KB,
+full quality) with a palette-quantised PNG fallback (137 KB).
+
 ## Selection rules applied
 
 Each candidate was downloaded and inspected at full resolution before

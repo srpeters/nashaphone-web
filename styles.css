@@ -355,7 +355,9 @@ img, svg { display: block; }
   backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); width: 100%; max-width: 400px;
   box-shadow: 0 30px 70px rgba(0,0,0,.45);
 }
-.offer__frame svg.device { height: 186px; width: auto; color: #fff; opacity: .95; }
+/* Client-supplied product shot, cut out to real transparency so it sits on
+   the dark band and the amber glow rather than on a white slab. */
+.offer__photo { width: 100%; max-width: 290px; height: auto; }
 .offer__frame .brand-logo { height: 46px; fill: #fff; opacity: .92; }
 .offer__frame .brand-logo--wide { height: 84px; }
 .offer__tag {
