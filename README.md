@@ -86,6 +86,30 @@ kinds are sized separately in CSS.
   typed values and hands off to the visitor's mail client; nothing is
   submitted to or stored on any server.
 
+## Visual checks on real device profiles
+
+`scripts/visual-check.mjs` loads the live site across iPhone 13 mini,
+iPhone 14 Pro, iPhone 14 Pro Max, iPad Mini and desktop 1440/1920, writes
+a full-page and an offer-band screenshot per profile into `build/shots/`
+(gitignored), and measures horizontal overflow plus the geometry of the
+featured offer band, failing on overflow, out-of-viewport elements or
+unexpected overlaps.
+
+```bash
+npm install -D playwright          # not committed: the site ships no build tooling
+npx playwright install webkit chromium
+node scripts/visual-check.mjs                       # live site
+node scripts/visual-check.mjs "file://$PWD/index.html"   # local
+```
+
+**Engine caveat.** iOS Safari is WebKit, and Chromium at 390px wide is
+not an iPhone. The script asks for WebKit on the phone and tablet
+profiles. If WebKit cannot launch — it needs system libraries that
+require root — it falls back to Chromium with the device's viewport,
+deviceScaleFactor, isMobile and touch flags and prints `NOT Safari` on
+every affected line. Layout and overflow findings from the fallback are
+reliable; anything WebKit-specific is unverified.
+
 ## Deployment
 
 GitHub Pages, served from `main` at the repository root.

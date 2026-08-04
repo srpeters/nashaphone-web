@@ -365,6 +365,36 @@ img, svg { display: block; }
   border-radius: 999px; padding: 7px 14px;
 }
 
+/* Offer band on phones and tablets, where the grid is stacked rather than
+   two columns. Measured on an iPhone 14 Pro profile: the frame was 530px
+   tall around a 313px image, so 53% of it was empty and it read as a black
+   box rather than a product panel. The image now fills the frame and the
+   chrome around it is tightened. Scoped below 900px, so the approved
+   desktop rendering is untouched. */
+@media (max-width: 899px) {
+  .offer { padding-block: clamp(40px, 9vw, 72px); }
+  .offer__grid { gap: 24px; }
+  .offer__actions { margin-top: 20px; }
+  .offer__frame {
+    max-width: 360px; padding: 16px 16px 14px; gap: 10px; border-radius: 20px;
+  }
+  .offer__photo { max-width: 100%; }
+  .offer__frame .brand-logo--wide { height: 52px; }
+  .offer__tag { padding: 6px 13px; }
+
+  /* Touch targets. Measured on the iPhone profile, these links were 15-20px
+     tall against the 44px iOS minimum, and they are the primary contact
+     affordances: the phone number and the address. Desktop keeps its
+     tighter rhythm because it is a pointer, not a thumb. */
+  .utility a { padding-block: 12px; }
+  .footer ul a, .footer__bottom a { display: inline-block; padding-block: 11px; }
+  .footer ul { gap: 2px; }
+  .contact__value a {
+    display: inline-block; padding-block: 10px;
+    border-bottom: 0; text-decoration: underline; text-underline-offset: 5px;
+  }
+}
+
 /* ---------- conditions panel ---------- */
 
 .panel {
