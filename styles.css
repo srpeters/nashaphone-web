@@ -230,6 +230,57 @@ img, svg { display: block; }
   }
 }
 
+/* ---------- company identity card ----------
+   Reads as a document extract, not a marketing panel: hairline-separated
+   rows, uppercase labels, regular-weight values. Existing tokens only;
+   amber appears once, as a 18x2 rule in the heading. */
+
+.idcard {
+  background: var(--white);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.idcard__head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--hairline);
+  font-size: .75rem; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--muted);
+}
+.idcard__head::before {
+  content: ""; width: 18px; height: 2px; background: var(--accent); flex: none;
+}
+
+.idcard__rows { margin: 0; }
+
+.idcard__row {
+  display: grid; gap: 2px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--hairline);
+}
+.idcard__row dt {
+  font-size: .6875rem; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--muted);
+}
+.idcard__row dd { margin: 0; font-size: .9375rem; color: var(--text); }
+
+.idcard__foot {
+  padding: 12px 20px; background: var(--surface);
+  font-size: .8125rem; color: var(--muted);
+}
+
+/* Its own band, kept deliberately compact so it does not become a section. */
+.idcard-band { padding-block: clamp(32px, 4vw, 56px); }
+
+@media (min-width: 600px) {
+  .idcard__row {
+    grid-template-columns: 124px 1fr; gap: 16px; align-items: baseline;
+  }
+}
+
 /* ---------- stats ---------- */
 
 .stats { border-block: 1px solid var(--hairline); background: var(--white); }
