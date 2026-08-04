@@ -78,29 +78,132 @@
     });
   }
 
-  /* ---- enquiry form -> mailto, so it works with no backend ---- */
+  /* ---- enquiry form: real submission via fetch ----
+     Without JavaScript the form posts natively to the same endpoint, so
+     the no-JS path still delivers. Validation here never replaces the
+     server side: the endpoint and the required attributes both stand. */
 
   var form = document.getElementById("enquiry");
+  if (!form) return;
 
-  if (form) {
-    form.addEventListener("submit", function (event) {
-      event.preventDefault();
-      var get = function (name) {
-        var field = form.elements[name];
-        return field && field.value ? field.value.trim() : "";
-      };
-      var body = [
-        "Nombre: " + get("nombre"),
-        "Empresa: " + get("empresa"),
-        "Correo: " + get("correo"),
-        "",
-        get("mensaje")
-      ].join("\n");
+  var FALLBACK =
+    'No hemos podido enviar el mensaje. Escríbanos directamente a ' +
+    '<a href="mailto:comercial@nashaphone.es">comercial@nashaphone.es</a> ' +
+    'o llame al <a href="tel:+34645935546">+34 645 93 55 46</a>.';
 
-      window.location.href =
-        "mailto:comercial@nashaphone.es" +
-        "?subject=" + encodeURIComponent("Solicitud de listado de referencias") +
-        "&body=" + encodeURIComponent(body);
-    });
+  var statusBox = document.getElementById("form-status");
+  var submitBtn = document.getElementById("enquiry-submit");
+
+  function setStatus(message, kind) {
+    statusBox.innerHTML = message;
+    statusBox.className = "form-status" + (kind ? " form-status--" + kind : "");
+    statusBox.hidden = false;
   }
+
+  function setError(inputId, errorId, message) {
+    var input = document.getElementById(inputId);
+    var box = document.getElementById(errorId);
+    if (message) {
+      input.setAttribute("aria-invalid", "true");
+      box.textContent = message;
+      box.hidden = false;
+    } else {
+      input.removeAttribute("aria-invalid");
+      box.textContent = "";
+      box.hidden = true;
+    }
+  }
+
+  function validate() {
+    var problems = [];
+    var name = form.elements["nombre"];
+    var mail = form.elements["correo"];
+    var consent = form.elements["consentimiento"];
+
+    setError("f-name", "e-name", "");
+    setError("f-email", "e-email", "");
+    setError("f-consent", "e-consent", "");
+
+    if (!name.value.trim()) {
+      setError("f-name", "e-name", "Indique su nombre.");
+      problems.push(name);
+    }
+    if (!mail.value.trim()) {
+      setError("f-email", "e-email", "Indique su correo electrónico.");
+      problems.push(mail);
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail.value.trim())) {
+      setError("f-email", "e-email", "Ese correo no parece válido. Revíselo.");
+      problems.push(mail);
+    }
+    if (!consent.checked) {
+      setError("f-consent", "e-consent",
+        "Debe aceptar la política de privacidad para poder enviar la solicitud.");
+      problems.push(consent);
+    }
+    return problems;
+  }
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    // Honeypot: a person cannot tick a field they cannot see or reach.
+    if (form.elements["botcheck"] && form.elements["botcheck"].checked) {
+      setStatus("Mensaje enviado. Le responderemos en breve.", "ok");
+      return;
+    }
+
+    var problems = validate();
+    if (problems.length) {
+      problems[0].focus();
+      setStatus("Revise los campos marcados antes de enviar.", "error");
+      return;
+    }
+
+    var key = form.elements["access_key"].value;
+    if (!key || key.indexOf("PEGAR-AQUI") === 0) {
+      // Not wired up yet: say so instead of failing silently.
+      setStatus(FALLBACK, "error");
+      return;
+    }
+
+    var payload = {};
+    new FormData(form).forEach(function (value, field) { payload[field] = value; });
+
+    submitBtn.disabled = true;
+    var original = submitBtn.textContent;
+    submitBtn.textContent = "Enviando…";
+    setStatus("Enviando…");
+
+    fetch(form.action, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(payload)
+    })
+      .then(function (response) { return response.json().catch(function () { return {}; }); })
+      .then(function (data) {
+        if (data && data.success) {
+          form.reset();
+          setStatus("Mensaje enviado. Le responderemos en breve.", "ok");
+        } else {
+          setStatus(FALLBACK, "error");
+        }
+      })
+      .catch(function () { setStatus(FALLBACK, "error"); })
+      .finally(function () {
+        submitBtn.disabled = false;
+        submitBtn.textContent = original;
+      });
+  });
+
+  // Clear a field's error as soon as the visitor fixes it.
+  ["f-name", "f-email", "f-consent"].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener("input", function () {
+      if (el.getAttribute("aria-invalid")) validate();
+    });
+    el.addEventListener("change", function () {
+      if (el.getAttribute("aria-invalid")) validate();
+    });
+  });
 })();

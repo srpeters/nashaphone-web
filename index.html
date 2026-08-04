@@ -45,16 +45,6 @@
     <rect x="11" y="12" width="17" height="3" rx="1.5" fill="currentColor"/>
     <circle cx="43" cy="13.5" r="3" fill="currentColor"/>
   </symbol>
-  <symbol id="dev-drill" viewBox="0 0 72 56">
-    <path d="M10 12h30a8 8 0 0 1 8 8v4a8 8 0 0 1-8 8H10z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
-    <rect x="48" y="17" width="14" height="10" rx="2.5" fill="currentColor"/>
-    <path d="M20 32l-4 18h12l3-18" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
-  </symbol>
-  <symbol id="dev-audio" viewBox="0 0 64 64">
-    <path d="M11 40v-7a21 21 0 0 1 42 0v7" fill="none" stroke="currentColor" stroke-width="3"/>
-    <rect x="5" y="37" width="13" height="21" rx="6" fill="currentColor"/>
-    <rect x="46" y="37" width="13" height="21" rx="6" fill="currentColor"/>
-  </symbol>
 </defs></svg>
 
 <div class="utility">
@@ -210,7 +200,14 @@
       </div>
       <div class="cards">
         <article class="card reveal">
-          <div class="card__art"><svg viewBox="0 0 48 72"><use href="#dev-phone"/></svg></div>
+          <div class="card__art">
+            <picture>
+              <source srcset="assets/img/telefonia.webp" type="image/webp">
+              <img src="assets/img/telefonia.jpg" width="900" height="675"
+                   loading="lazy" decoding="async"
+                   alt="Teléfono móvil nuevo, con la pantalla en blanco, sobre un fondo neutro.">
+            </picture>
+          </div>
           <p class="card__num">01</p>
           <h3>Telefonía móvil</h3>
           <p class="card__text">Terminales precintados por lote.</p>
@@ -218,7 +215,14 @@
           <p class="card__foot">Lotes y palés</p>
         </article>
         <article class="card reveal">
-          <div class="card__art"><svg viewBox="0 0 72 56"><use href="#dev-drill"/></svg></div>
+          <div class="card__art">
+            <picture>
+              <source srcset="assets/img/electrodomesticos.webp" type="image/webp">
+              <img src="assets/img/electrodomesticos.jpg" width="900" height="675"
+                   loading="lazy" decoding="async"
+                   alt="Hornos y placa de cocina empotrados, nuevos, en una cocina blanca.">
+            </picture>
+          </div>
           <p class="card__num">02</p>
           <h3>Electrodomésticos y herramienta</h3>
           <p class="card__text">Gama blanca y herramienta eléctrica.</p>
@@ -226,7 +230,14 @@
           <p class="card__foot">Lotes y palés</p>
         </article>
         <article class="card reveal">
-          <div class="card__art"><svg viewBox="0 0 72 56"><use href="#dev-tv"/></svg></div>
+          <div class="card__art">
+            <picture>
+              <source srcset="assets/img/televisores.webp" type="image/webp">
+              <img src="assets/img/televisores.jpg" width="900" height="675"
+                   loading="lazy" decoding="async"
+                   alt="Televisor de pantalla plana apagado, montado en una pared clara.">
+            </picture>
+          </div>
           <p class="card__num">03</p>
           <h3>Televisores</h3>
           <p class="card__text">Producto nuevo, embalaje original.</p>
@@ -234,7 +245,14 @@
           <p class="card__foot">Lotes y palés</p>
         </article>
         <article class="card reveal">
-          <div class="card__art"><svg viewBox="0 0 64 64"><use href="#dev-audio"/></svg></div>
+          <div class="card__art">
+            <picture>
+              <source srcset="assets/img/electronica.webp" type="image/webp">
+              <img src="assets/img/electronica.jpg" width="900" height="675"
+                   loading="lazy" decoding="async"
+                   alt="Auriculares de diadema blancos sobre un fondo claro.">
+            </picture>
+          </div>
           <p class="card__num">04</p>
           <h3>Electrónica de consumo</h3>
           <p class="card__text">Audio, imagen y accesorio.</p>
@@ -349,27 +367,57 @@
         <p class="contact__legal reveal">Nasha Phone S.L. · NIF B05303425</p>
       </div>
 
-      <form class="enquiry reveal" id="enquiry" action="mailto:comercial@nashaphone.es" method="post" enctype="text/plain">
+      <form class="enquiry reveal" id="enquiry" action="https://api.web3forms.com/submit" method="POST" novalidate>
+        <!-- Web3Forms access key. It is public by design: it only permits
+             sending mail to the inbox it was issued for, and grants no
+             access to anything. Replace the placeholder with the real key
+             from web3forms.com and the form starts delivering. -->
+        <input type="hidden" name="access_key" value="PEGAR-AQUI-LA-ACCESS-KEY-DE-WEB3FORMS">
+        <input type="hidden" name="subject" value="Solicitud de listado desde la web">
+        <input type="hidden" name="from_name" value="Web Nasha Phone">
+
+        <!-- Honeypot: hidden from sighted users and from screen readers.
+             A bot fills it, a person never can. -->
+        <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
         <h3>Solicitud de listado</h3>
         <p class="enquiry__hint">Rellene los datos y le enviamos el listado de referencias con cantidades y precios.</p>
+
         <div class="field">
-          <label for="f-name">Nombre y apellidos</label>
-          <input id="f-name" name="nombre" type="text" autocomplete="name" required>
+          <label for="f-name">Nombre y apellidos <span class="req" aria-hidden="true">*</span></label>
+          <input id="f-name" name="nombre" type="text" autocomplete="name" required
+                 aria-required="true" aria-describedby="e-name">
+          <p class="field__error" id="e-name" hidden></p>
         </div>
         <div class="field">
           <label for="f-company">Empresa</label>
           <input id="f-company" name="empresa" type="text" autocomplete="organization">
         </div>
         <div class="field">
-          <label for="f-email">Correo electrónico</label>
-          <input id="f-email" name="correo" type="email" autocomplete="email" required>
+          <label for="f-email">Correo electrónico <span class="req" aria-hidden="true">*</span></label>
+          <input id="f-email" name="correo" type="email" autocomplete="email" inputmode="email" required
+                 aria-required="true" aria-describedby="e-email">
+          <p class="field__error" id="e-email" hidden></p>
+        </div>
+        <div class="field">
+          <label for="f-phone">Teléfono <span class="field__opt">(opcional)</span></label>
+          <input id="f-phone" name="telefono" type="tel" autocomplete="tel" inputmode="tel">
         </div>
         <div class="field">
           <label for="f-msg">Qué necesita</label>
           <textarea id="f-msg" name="mensaje" rows="4" placeholder="Categorías, cantidades aproximadas"></textarea>
         </div>
-        <button class="btn btn--accent" type="submit">Enviar solicitud</button>
-        <p class="enquiry__note">Al enviar se abrirá su programa de correo con los datos ya escritos, listos para enviar a comercial@nashaphone.es. Esta web no almacena ningún dato.</p>
+
+        <div class="consent">
+          <input id="f-consent" name="consentimiento" type="checkbox" value="si" required
+                 aria-required="true" aria-describedby="e-consent">
+          <label for="f-consent">He leído y acepto la <a href="politica-privacidad.html">política de privacidad</a>. Mis datos se usarán únicamente para responder a esta solicitud. <span class="req" aria-hidden="true">*</span></label>
+        </div>
+        <p class="field__error" id="e-consent" hidden></p>
+
+        <button class="btn btn--accent" type="submit" id="enquiry-submit">Enviar solicitud</button>
+        <p class="form-status" id="form-status" role="status" aria-live="polite" hidden></p>
+        <p class="enquiry__note">También puede escribirnos directamente a <a href="mailto:comercial@nashaphone.es">comercial@nashaphone.es</a> o llamar al <a href="tel:+34645935546">+34 645 93 55 46</a>.</p>
       </form>
     </div>
   </section>
@@ -413,12 +461,13 @@
           <li><a href="#condiciones">Cómo trabajamos</a></li>
           <li><a href="#proceso">Proceso</a></li>
           <li><a href="aviso-legal.html">Aviso legal</a></li>
+          <li><a href="politica-privacidad.html">Política de privacidad</a></li>
         </ul>
       </div>
     </div>
     <div class="footer__bottom">
       <span>Nasha Phone S.L. · NIF B05303425 · Calle Canalejas 44, bajo comercial, 29700 Vélez-Málaga (Málaga)</span>
-      <span><a href="aviso-legal.html">Aviso legal</a></span>
+      <span><a href="aviso-legal.html">Aviso legal</a> · <a href="politica-privacidad.html">Política de privacidad</a></span>
     </div>
   </div>
 </footer>

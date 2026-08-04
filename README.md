@@ -19,11 +19,38 @@ browser — double-clicking the file works, `file://` and all.
 |---|---|
 | `index.html` | the whole site, eleven sections from utility bar to footer |
 | `aviso-legal.html` | LSSI-CE identification page |
+| `politica-privacidad.html` | RGPD privacy policy for the contact form |
 | `styles.css` | hand-written stylesheet, mobile first |
-| `main.js` | reveals, header blur, mobile nav, mailto enquiry |
+| `main.js` | reveals, header blur, mobile nav, form validation and submit |
 | `favicon.svg` | monogram, drawn as paths so no font is needed |
 | `og-image.png` | 1200×630 link preview card |
+| `assets/img/` | the four category photographs, WebP + JPEG |
+| `docs/IMAGE-CREDITS.md` | source and licence of every photograph |
 | `DESIGN.md` | the design plan this build was made to |
+
+## Contact form
+
+The form posts to Web3Forms, which relays the submission to
+`comercial@nashaphone.es`. There is no backend and no database here.
+
+**To activate it**, paste the access key from web3forms.com into the one
+placeholder in `index.html`:
+
+```html
+<input type="hidden" name="access_key" value="PEGAR-AQUI-LA-ACCESS-KEY-DE-WEB3FORMS">
+```
+
+The key is a UUID and is **public by design** — Web3Forms documents it as
+such. It only permits sending mail to the inbox it was issued for and
+grants access to nothing. Until it is replaced, the form validates
+normally and then shows the failure state, which gives the visitor the
+direct e-mail address, so no enquiry is silently lost.
+
+Behaviour: `fetch()` submission with Spanish sending/success/failure
+states, a required RGPD consent checkbox that blocks submission, a
+honeypot hidden from both sighted users and screen readers, and
+client-side validation with accessible inline errors. Without
+JavaScript the form posts natively to the same endpoint.
 
 ## Brand logos
 
