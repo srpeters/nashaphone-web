@@ -50,7 +50,7 @@ const BAND_PARTS = {
 };
 
 const rectsOf = async (page) =>
-  page.evaluate((parts) => {
+  page.evaluate(async (parts) => {
     const out = {};
     for (const [key, sel] of Object.entries(parts)) {
       const el = document.querySelector(sel);
@@ -61,8 +61,14 @@ const rectsOf = async (page) =>
         w: Math.round(r.width), h: Math.round(r.height),
       };
       if (el.tagName === "IMG") {
-        out[key].naturalW = el.naturalWidth;
-        out[key].naturalH = el.naturalHeight;
+        // naturalWidth on a srcset image is density-corrected to CSS pixels,
+        // so it cannot tell us how many real pixels the chosen FILE has.
+        // Re-load the chosen file plainly to get its true resolution.
+        const probe = new Image();
+        probe.src = el.currentSrc;
+        try { await probe.decode(); } catch { /* fall back to naturalWidth */ }
+        out[key].naturalW = probe.naturalWidth || el.naturalWidth;
+        out[key].naturalH = probe.naturalHeight || el.naturalHeight;
         out[key].currentSrc = (el.currentSrc || "").split("/").pop();
       }
     }
@@ -158,12 +164,20 @@ async function run() {
       }
     }
     if (rects.image) {
+      // One asset serves every profile, so judge it against a 2x baseline
+      // rather than this profile's own DPR: a 1x desktop would otherwise
+      // flag an image that a 3x phone genuinely needs. Retina desktops
+      // exist, so 2x is the floor even when this run reports dpr1.
       const served = rects.image.naturalW || 0;
       const shown = rects.image.w;
-      const ratio = shown ? served / (shown * (metrics.dpr || 1)) : 0;
+      const needed = shown * Math.max(metrics.dpr || 1, 2);
+      const ratio = needed ? served / needed : 0;
       if (ratio > 1.6) {
-        failures.push(`image oversized for this screen: serving ${served}px for ` +
-                      `${shown}css x dpr${metrics.dpr} = ${Math.round(shown * metrics.dpr)}px needed (${ratio.toFixed(1)}x)`);
+        failures.push(`image oversized: serving ${served}px, ${shown}css needs ` +
+                      `${Math.round(needed)}px at ${Math.max(metrics.dpr, 2)}x (${ratio.toFixed(1)}x)`);
+      } else if (ratio < 0.8) {
+        failures.push(`image undersized: serving ${served}px, ${shown}css needs ` +
+                      `${Math.round(needed)}px at dpr${metrics.dpr} (${ratio.toFixed(2)}x)`);
       }
     }
 

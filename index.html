@@ -296,7 +296,11 @@
         <div class="offer__frame">
           <span class="offer__tag">200 uds.</span>
           <picture>
-            <source srcset="assets/img/samsung-s20.webp" type="image/webp">
+            <source type="image/webp"
+                    srcset="assets/img/samsung-s20-580.webp 580w,
+                            assets/img/samsung-s20-725.webp 725w,
+                            assets/img/samsung-s20-1000.webp 1000w"
+                    sizes="(max-width: 899px) 328px, 290px">
             <img class="offer__photo" src="assets/img/samsung-s20.png"
                  width="725" height="850" decoding="async"
                  alt="Samsung Galaxy S20 visto por delante y por detrás.">
